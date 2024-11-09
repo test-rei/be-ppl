@@ -1,4 +1,4 @@
-import MHS from "../models/index.js";
+import MHS from "../models/mhs.js";
 
 export async function getAllMHS(req, res) {
     try {

@@ -1,4 +1,4 @@
-import MK from "../models/index.js";
+import MK from "../models/mk.js";
 
 export async function getAllMK(req, res) {
     try {

@@ -17,7 +17,7 @@ app.use("/krs", krsRoutes);
 app.use("/mhs", mhsRoutes);
 app.use("/ipk", ipkRoutes);
 
-sequelize.sync().then(() => {
+sequelize.sync({ force: true }).then(() => {
     console.log("Database connected and synchronized");
 });
 

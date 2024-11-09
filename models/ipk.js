@@ -42,4 +42,15 @@ const IPK = sequelize.define(
     }
 );
 
+MHS.hasMany(IPK, {
+    foreignKey: "nim",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+IPK.belongsTo(MHS, {
+    foreignKey: "nim",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+
 export default IPK;

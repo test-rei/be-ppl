@@ -46,4 +46,26 @@ const KRS = sequelize.define(
     }
 );
 
+MHS.hasMany(KRS, {
+    foreignKey: "nim",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+KRS.belongsTo(MHS, {
+    foreignKey: "nim",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+
+MK.hasMany(KRS, {
+    foreignKey: "id_mk",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+KRS.belongsTo(MK, {
+    foreignKey: "id_mk",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+
 export default KRS;
