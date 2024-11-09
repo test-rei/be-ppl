@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const router = express.Router();
 
 // Import routes
 import mkRoutes from "./routes/mkRoutes.js";
@@ -13,12 +12,12 @@ import krsRoutes from "./routes/krsRoutes.js";
 import mhsRoutes from "./routes/mhsRoutes.js";
 import ipkRoutes from "./routes/ipkRoutes.js";
 
-app.use("/mk", mkRoutes);
-app.use("/krs", krsRoutes);
-app.use("/mhs", mhsRoutes);
-app.use("/ipk", ipkRoutes);
+app.use(mkRoutes);
+app.use(krsRoutes);
+app.use(mhsRoutes);
+app.use(ipkRoutes);
 
-router.get("/", (req, res) => {
+app.get("/", (req, res) => {
     res.redirect("https://github.com/test-rei/be-ppl");
 });
 
