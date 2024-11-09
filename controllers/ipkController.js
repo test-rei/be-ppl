@@ -1,4 +1,5 @@
 import IPK from "../models/ipk.js";
+import MHS from "../models/mhs.js";
 
 export async function getAllIPK(req, res) {
     try {
