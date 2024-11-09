@@ -1,5 +1,5 @@
 import express from "express";
-import { sequelize } from "./models/index.js";
+import sequelize from "./models/index.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -18,7 +18,7 @@ app.use("/krs", krsRoutes);
 app.use("/mhs", mhsRoutes);
 app.use("/ipk", ipkRoutes);
 
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync().then(() => {
     console.log("Database connected and synchronized");
 });
 
