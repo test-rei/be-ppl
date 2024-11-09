@@ -1,4 +1,4 @@
-import { IPK } from "../models/index.js";
+import IPK from "../models/index.js";
 
 export async function getAllIPK(req, res) {
     try {

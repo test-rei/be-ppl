@@ -1,4 +1,4 @@
-import { KRS } from "../models/index.js";
+import KRS from "../models/index.js";
 
 export async function getAllKRS(req, res) {
     try {
