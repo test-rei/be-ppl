@@ -1,4 +1,6 @@
 import KRS from "../models/krs.js";
+import MHS from "../models/mhs.js";
+import MK from "../models/mk.js";
 
 export async function getAllKRS(req, res) {
     try {
