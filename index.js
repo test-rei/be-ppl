@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+const router = express.Router();
 
 // Import routes
 import mkRoutes from "./routes/mkRoutes.js";
@@ -17,7 +18,11 @@ app.use("/krs", krsRoutes);
 app.use("/mhs", mhsRoutes);
 app.use("/ipk", ipkRoutes);
 
-sequelize.sync({ force: true }).then(() => {
+router.get("/", (req, res) => {
+    res.redirect("https://github.com/test-rei/be-ppl");
+});
+
+sequelize.sync({}).then(() => {
     console.log("Database connected and synchronized");
 });
 
