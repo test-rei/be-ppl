@@ -1,7 +1,9 @@
-import { DataTypes } from "sequelize";
-import { define } from "../config/database.js";
+import { Sequelize } from "sequelize";
+import sequelize from "../config/database.js";
 
-const MK = define(
+const { DataTypes } = Sequelize;
+
+const MK = sequelize.define(
     "MK",
     {
         id_mk: {
