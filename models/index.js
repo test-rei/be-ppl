@@ -1,4 +1,3 @@
-import sequelize from "../config/database.js";
 import MK from "./mk.js";
 import KRS from "./krs.js";
 import MHS from "./mhs.js";
@@ -38,4 +37,4 @@ IPK.belongsTo(MHS, {
     onUpdate: "CASCADE",
 });
 
-export default { sequelize, MK, KRS, MHS, IPK };
+export default { MK, KRS, MHS, IPK };
