@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-app.use(json());
 
 // Import routes
 import mkRoutes from "./routes/mkRoutes.js";
