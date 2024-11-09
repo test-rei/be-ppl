@@ -9,10 +9,10 @@ const app = express();
 app.use(json());
 
 // Import routes
-import mkRoutes from "./routes/mkRoutes";
-import krsRoutes from "./routes/krsRoutes";
-import mhsRoutes from "./routes/mhsRoutes";
-import ipkRoutes from "./routes/ipkRoutes";
+import mkRoutes from "./routes/mkRoutes.js";
+import krsRoutes from "./routes/krsRoutes.js";
+import mhsRoutes from "./routes/mhsRoutes.js";
+import ipkRoutes from "./routes/ipkRoutes.js";
 
 app.use("/mk", mkRoutes);
 app.use("/krs", krsRoutes);

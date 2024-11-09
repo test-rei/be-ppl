@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { define } from "../config/database";
+import { define } from "../config/database.js";
 
 const MHS = define(
     "MHS",

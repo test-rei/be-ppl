@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllMK, getMKById, createMK, updateMK, deleteMK } from "../controllers/mkController";
+import { getAllMK, getMKById, createMK, updateMK, deleteMK } from "../controllers/mkController.js";
 
 const router = Router();
 

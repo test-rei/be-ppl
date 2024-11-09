@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
-import { define } from "../config/database";
-import MK from "./mk";
-import MHS from "./mhs";
+import { define } from "../config/database.js";
+import MK from "./mk.js";
+import MHS from "./mhs.js";
 
 const KRS = define(
     "KRS",

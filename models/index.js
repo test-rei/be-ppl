@@ -1,8 +1,8 @@
-import sequelize from "../config/database";
-import { MK } from "./mk";
-import { KRS } from "./krs";
-import { MHS } from "./mhs";
-import { IPK } from "./ipk";
+import sequelize from "../config/database.js";
+import { MK } from "./mk.js";
+import { KRS } from "./krs.js";
+import { MHS } from "./mhs.js";
+import { IPK } from "./ipk.js";
 
 // Relasi antar tabel (Jika ada relasi)
 MHS.hasMany(KRS, {

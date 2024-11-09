@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
-import { define } from "../config/database";
-import MHS from "./mhs";
+import { define } from "../config/database.js";
+import MHS from "./mhs.js";
 
 const IPK = define(
     "IPK",
