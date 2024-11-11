@@ -21,14 +21,12 @@ async function calculateIPS(nim, semester, tahun) {
     // Loop semua KRS dan hitung total SKS dan total nilai
     krsList.forEach((krs) => {
         const nilai = krs.nilai; // Nilai mata kuliah dari KRS
+        const sks = krs.MK ? krs.MK.sks : 0; // Pastikan SKS diambil dari relasi MK
 
-        // Pastikan MK dan SKS ada sebelum menghitung
-        if (krs.mk && krs.mk.sks) {
-            const sks = krs.mk.sks; // Jumlah SKS dari tabel MK
+        if (sks > 0) {
+            // Hanya jika SKS valid
             totalSKS += sks;
             totalNilai += nilai * sks;
-        } else {
-            console.warn(`Mata kuliah atau SKS tidak ditemukan untuk KRS dengan id: ${krs.id}`);
         }
     });
 
@@ -46,9 +44,10 @@ async function calculateIPK(nim) {
     // Ambil semua KRS berdasarkan NIM
     const krsList = await KRS.findAll({
         where: { nim },
-        include: [MK],
+        include: [MK], // Join dengan tabel MK
     });
 
+    // Jika tidak ada KRS untuk mahasiswa ini, return 0
     if (krsList.length === 0) {
         return 0;
     }
@@ -58,13 +57,22 @@ async function calculateIPK(nim) {
 
     // Loop semua KRS untuk menghitung total nilai dan SKS
     krsList.forEach((krs) => {
-        const nilai = krs.nilai;
-        const sks = krs.mk.sks;
+        const nilai = krs.nilai; // Nilai dari KRS
+        const sks = krs.MK ? krs.MK.sks : 0; // Ambil SKS dari MK jika tersedia
 
-        totalSKS += sks;
-        totalNilai += nilai * sks;
+        if (sks > 0) {
+            // Pastikan SKS valid
+            totalSKS += sks;
+            totalNilai += nilai * sks;
+        }
     });
 
+    // Jika tidak ada SKS, return 0 untuk IPK
+    if (totalSKS === 0) {
+        return 0;
+    }
+
+    // Hitung IPK
     const ipk = totalNilai / totalSKS;
     return ipk;
 }
