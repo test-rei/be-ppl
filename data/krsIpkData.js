@@ -58,9 +58,9 @@ const generateDummyKRS = (mkData, mhsData) => {
         // Kirimkan setiap data KRS satu persatu
         grades.forEach(async (grade) => {
             const krsData = {
-                nim,
-                semester,
                 tahun,
+                semester,
+                nim,
                 id_mk: grade.id_mk,
                 nilai: grade.nilai, // Nilai integer antara 0 dan 4
             };
@@ -73,11 +73,22 @@ const generateDummyKRS = (mkData, mhsData) => {
 
 // Mengirimkan data KRS satu per satu
 const sendDummyData = async (krsData) => {
-    try {
-        const response = await axios.post("https://server-ppl-production.up.railway.app/krs", krsData);
-        console.log("KRS data successfully sent", response.data);
-    } catch (error) {
-        console.error("An error occurred while sending KRS data", error);
+    const BATCH_SIZE = 10; // Set the number of requests to send at once
+    for (let i = 0; i < krsData.length; i += BATCH_SIZE) {
+        const batch = krsData.slice(i, i + BATCH_SIZE);
+
+        // Send batch requests
+        const batchPromises = batch.map(async (data) => {
+            try {
+                const response = await axios.post("https://server-ppl-production.up.railway.app/krs", data);
+                console.log("KRS data successfully sent", response.data);
+            } catch (error) {
+                console.error("An error occurred while sending KRS data", error);
+            }
+        });
+
+        // Wait for the batch to finish before continuing
+        await Promise.all(batchPromises);
     }
 };
 
