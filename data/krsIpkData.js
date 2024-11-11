@@ -34,39 +34,51 @@ const generateDummyKRS = async (mkData, mhsData) => {
     // Menghasilkan data KRS berdasarkan jumlah mahasiswa yang ada
     for (const mhs of mhsData) {
         const nim = mhs.nim; // Ambil NIM dari data MHS
-        const semester = Math.floor(Math.random() * 14) + 1; // Semester acak antara 1 dan 14
-        const tahun = Math.floor(Math.random() * (2028 - 2021 + 1)) + 2021; // Tahun acak antara 2021 dan 2028
 
-        // Tentukan jumlah mata kuliah yang akan diambil (min 7, max 58)
-        const numberOfCourses = Math.floor(Math.random() * (58 - 7 + 1)) + 7;
+        // Tentukan jumlah semester (min 3, max 8)
+        const totalSemesters = Math.floor(Math.random() * (8 - 3 + 1)) + 3;
+        let tahun = 2021; // Mulai dari tahun 2021
 
-        // Ambil 'numberOfCourses' mata kuliah acak
-        const courses = [];
-        while (courses.length < numberOfCourses) {
-            const randomMK = mkData[Math.floor(Math.random() * mkData.length)];
-            if (!courses.find((course) => course.id_mk === randomMK.id_mk)) {
-                courses.push(randomMK);
+        for (let i = 0; i < totalSemesters; i++) {
+            const semester = i + 1; // Iterasi semester
+
+            // Jika semester ganjil (semester 1, 3, 5, dst.), maka tetap pada tahun saat ini
+            // Jika semester genap (semester 2, 4, 6, dst.), maka tambahkan tahun
+            if (semester % 2 === 0) {
+                tahun++;
             }
-        }
 
-        // Generate nilai acak untuk setiap mata kuliah dengan angka 4 s/d 0
-        const grades = courses.map((course) => ({
-            id_mk: course.id_mk,
-            nilai: Math.floor(Math.random() * 5), // Nilai antara 0 dan 4
-        }));
+            // Tentukan jumlah mata kuliah yang akan diambil (min 3, max 7)
+            const numberOfCourses = Math.floor(Math.random() * (7 - 3 + 1)) + 3;
 
-        // Kirimkan setiap data KRS satu per satu secara asynchronous
-        for (const grade of grades) {
-            const krsData = {
-                tahun,
-                semester,
-                nim,
-                id_mk: grade.id_mk,
-                nilai: grade.nilai, // Nilai integer antara 0 dan 4
-            };
+            // Ambil 'numberOfCourses' mata kuliah acak
+            const courses = [];
+            while (courses.length < numberOfCourses) {
+                const randomMK = mkData[Math.floor(Math.random() * mkData.length)];
+                if (!courses.find((course) => course.id_mk === randomMK.id_mk)) {
+                    courses.push(randomMK);
+                }
+            }
 
-            // Kirim data KRS satu persatu dan tunggu hingga selesai sebelum lanjut
-            await sendDummyData(krsData);
+            // Generate nilai acak untuk setiap mata kuliah dengan angka 4 s/d 0
+            const grades = courses.map((course) => ({
+                id_mk: course.id_mk,
+                nilai: Math.floor(Math.random() * 5), // Nilai antara 0 dan 4
+            }));
+
+            // Kirimkan setiap data KRS satu per satu secara asynchronous
+            for (const grade of grades) {
+                const krsData = {
+                    tahun,
+                    semester,
+                    nim,
+                    id_mk: grade.id_mk,
+                    nilai: grade.nilai, // Nilai integer antara 0 dan 4
+                };
+
+                // Kirim data KRS satu persatu dan tunggu hingga selesai sebelum lanjut
+                await sendDummyData(krsData);
+            }
         }
     }
 };
