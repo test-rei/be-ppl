@@ -29,13 +29,13 @@ async function generateDummyData() {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(`Data ke-${i} berhasil ditambahkan: ${response.status}`);
+            console.log(`Data ${i} successfully added: ${response.status}`);
         } catch (error) {
-            console.error(`Gagal menambahkan data ke-${i}:`, error.message);
+            console.error(`Failed to add data ${i}:`, error.message);
         }
     }
 
-    console.log("Proses penambahan data selesai");
+    console.log("Data addition process is complete");
 }
 
 // Menjalankan fungsi untuk generate data dummy
