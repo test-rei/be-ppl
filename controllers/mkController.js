@@ -28,8 +28,8 @@ export async function createMK(req, res) {
         if (!nama_mk || !sks) {
             return res.status(400).json({ error: "Nama MK and SKS are required" });
         }
-        const newMK = await MK.create({ nama_mk: nama_mk, sks: sks });
-        res.status(201).json(newMK);
+        await MK.create({ nama_mk: nama_mk, sks: sks });
+        res.status(201).json({ msg: "MK created successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to create MK" });
     }
