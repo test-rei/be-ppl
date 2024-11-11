@@ -30,10 +30,12 @@ const IPK = sequelize.define(
         ips: {
             type: DataTypes.FLOAT,
             allowNull: false,
+            defaultValue: 0,
         },
         ipk: {
             type: DataTypes.FLOAT,
             allowNull: false,
+            defaultValue: 0,
         },
     },
     {

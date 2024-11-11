@@ -16,11 +16,13 @@ const MHS = sequelize.define(
         },
         ips: {
             type: DataTypes.FLOAT,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: 0,
         },
         ipk: {
             type: DataTypes.FLOAT,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {
