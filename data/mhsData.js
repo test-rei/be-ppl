@@ -5,9 +5,9 @@ const url = "https://be-ppl-production.up.railway.app/mhs";
 
 // Fungsi untuk generate data dummy
 async function generateDummyData() {
-    const jumlahData = 5000;
+    const jumlahData = 1000;
 
-    // Loop untuk membuat 5000 data
+    // Loop untuk membuat data
     for (let i = 1; i <= jumlahData; i++) {
         const nim = `210555${String(i).padStart(4, "0")}`; // Membuat NIM sesuai format
         const nama_mhs = `Mahasiswa ${i}`; // Nama mahasiswa
