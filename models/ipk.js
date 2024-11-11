@@ -41,9 +41,16 @@ const IPK = sequelize.define(
     {
         tableName: "tb_ipk",
         timestamps: false,
+        indexes: [
+            {
+                unique: true, // Menandakan bahwa kombinasi nim, semester, dan tahun harus unik
+                fields: ["nim", "semester", "tahun"], // Kombinasi kolom untuk kunci unik
+            },
+        ],
     }
 );
 
+// Definisikan relasi antara MHS dan IPK
 MHS.hasMany(IPK, {
     foreignKey: "nim",
     onDelete: "CASCADE",
