@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // URL API yang akan digunakan
-const url = "https://server-ppl-production.up.railway.app/mhs";
+const url = "https://be-ppl-production.up.railway.app/mhs";
 
 // Fungsi untuk generate data dummy
 async function generateDummyData() {

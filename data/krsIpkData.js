@@ -4,11 +4,11 @@ import axios from "axios";
 const getMKAndMHSData = async () => {
     try {
         // Mendapatkan data MK
-        const mkResponse = await axios.get("https://server-ppl-production.up.railway.app/mk");
+        const mkResponse = await axios.get("https://be-ppl-production.up.railway.app/mk");
         const mkData = mkResponse.data;
 
         // Mendapatkan data MHS
-        const mhsResponse = await axios.get("https://server-ppl-production.up.railway.app/mhs");
+        const mhsResponse = await axios.get("https://be-ppl-production.up.railway.app/mhs");
         const mhsData = mhsResponse.data;
 
         // Mengecek jika data tersedia
@@ -30,9 +30,9 @@ const getMKAndMHSData = async () => {
     }
 };
 
-const generateDummyKRS = (mkData, mhsData) => {
+const generateDummyKRS = async (mkData, mhsData) => {
     // Menghasilkan data KRS berdasarkan jumlah mahasiswa yang ada
-    mhsData.forEach((mhs) => {
+    for (const mhs of mhsData) {
         const nim = mhs.nim; // Ambil NIM dari data MHS
         const semester = Math.floor(Math.random() * 14) + 1; // Semester acak antara 1 dan 14
         const tahun = Math.floor(Math.random() * (2028 - 2021 + 1)) + 2021; // Tahun acak antara 2021 dan 2028
@@ -55,8 +55,8 @@ const generateDummyKRS = (mkData, mhsData) => {
             nilai: Math.floor(Math.random() * 5), // Nilai antara 0 dan 4
         }));
 
-        // Kirimkan setiap data KRS satu persatu
-        grades.forEach(async (grade) => {
+        // Kirimkan setiap data KRS satu per satu secara asynchronous
+        for (const grade of grades) {
             const krsData = {
                 tahun,
                 semester,
@@ -65,30 +65,19 @@ const generateDummyKRS = (mkData, mhsData) => {
                 nilai: grade.nilai, // Nilai integer antara 0 dan 4
             };
 
-            // Kirim data KRS satu persatu
+            // Kirim data KRS satu persatu dan tunggu hingga selesai sebelum lanjut
             await sendDummyData(krsData);
-        });
-    });
+        }
+    }
 };
 
 // Mengirimkan data KRS satu per satu
 const sendDummyData = async (krsData) => {
-    const BATCH_SIZE = 10; // Set the number of requests to send at once
-    for (let i = 0; i < krsData.length; i += BATCH_SIZE) {
-        const batch = krsData.slice(i, i + BATCH_SIZE);
-
-        // Send batch requests
-        const batchPromises = batch.map(async (data) => {
-            try {
-                const response = await axios.post("https://server-ppl-production.up.railway.app/krs", data);
-                console.log("KRS data successfully sent", response.data);
-            } catch (error) {
-                console.error("An error occurred while sending KRS data", error);
-            }
-        });
-
-        // Wait for the batch to finish before continuing
-        await Promise.all(batchPromises);
+    try {
+        const response = await axios.post("https://be-ppl-production.up.railway.app/krs", krsData);
+        console.log("KRS data successfully sent:", response.data);
+    } catch (error) {
+        console.error("An error occurred while sending KRS data:", error);
     }
 };
 

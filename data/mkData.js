@@ -1,4 +1,4 @@
-const url = "https://server-ppl-production.up.railway.app/mk";
+const url = "https://be-ppl-production.up.railway.app/mk";
 const listMK = [
     { nama_mk: "Agama Islam", sks: 2 },
     { nama_mk: "Agama Katolik", sks: 2 },

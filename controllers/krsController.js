@@ -7,7 +7,7 @@ async function calculateIPS(nim, semester, tahun) {
     // Ambil semua KRS berdasarkan NIM, semester, dan tahun
     const krsList = await KRS.findAll({
         where: { nim, semester, tahun },
-        include: [MK],
+        include: [MK], // Join dengan tabel MK
     });
 
     // Jika tidak ada KRS di semester ini, return 0
@@ -21,11 +21,21 @@ async function calculateIPS(nim, semester, tahun) {
     // Loop semua KRS dan hitung total SKS dan total nilai
     krsList.forEach((krs) => {
         const nilai = krs.nilai; // Nilai mata kuliah dari KRS
-        const sks = krs.mk.sks; // Jumlah SKS dari tabel MK
 
-        totalSKS += sks;
-        totalNilai += nilai * sks;
+        // Pastikan MK dan SKS ada sebelum menghitung
+        if (krs.mk && krs.mk.sks) {
+            const sks = krs.mk.sks; // Jumlah SKS dari tabel MK
+            totalSKS += sks;
+            totalNilai += nilai * sks;
+        } else {
+            console.warn(`Mata kuliah atau SKS tidak ditemukan untuk KRS dengan id: ${krs.id}`);
+        }
     });
+
+    // Jika totalSKS masih 0 (tidak ada MK valid), return 0 untuk IPS
+    if (totalSKS === 0) {
+        return 0;
+    }
 
     // Hitung IPS
     const ips = totalNilai / totalSKS;
