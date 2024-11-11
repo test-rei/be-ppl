@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
     res.redirect("https://github.com/test-rei/be-ppl");
 });
 
-sequelize.sync({}).then(() => {
+sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected and synchronized");
 });
 

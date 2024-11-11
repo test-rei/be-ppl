@@ -36,8 +36,9 @@ const KRS = sequelize.define(
             },
         },
         nilai: {
-            type: DataTypes.STRING,
-            allowNull: true,
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
         },
     },
     {
