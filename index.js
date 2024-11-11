@@ -12,6 +12,9 @@ import krsRoutes from "./routes/krsRoutes.js";
 import mhsRoutes from "./routes/mhsRoutes.js";
 import ipkRoutes from "./routes/ipkRoutes.js";
 
+app.use(express.json({}));
+app.use(express.urlencoded({ extended: true }));
+
 app.use(mkRoutes);
 app.use(krsRoutes);
 app.use(mhsRoutes);
