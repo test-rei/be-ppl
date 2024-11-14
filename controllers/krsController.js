@@ -44,7 +44,7 @@ export async function createKRS(req, res) {
         const ips = await calculateIPS(nim, semester, tahun);
 
         // Hitung IPK untuk seluruh semester
-        const ipk = await calculateIPK(nim);
+        const ipk = await calculateIPK(nim, semester, tahun);
 
         // Update tabel IPK
         await IPK.upsert({
@@ -91,7 +91,7 @@ export async function updateKRS(req, res) {
 
         // Hitung ulang IPS dan IPK
         const ips = await calculateIPS(krs.nim, krs.semester, krs.tahun);
-        const ipk = await calculateIPK(krs.nim);
+        const ipk = await calculateIPK(krs.nim, krs.semester, krs.tahun);
 
         // Update tabel IPK
         await IPK.upsert({
@@ -135,7 +135,7 @@ export async function deleteKRS(req, res) {
 
         // Hitung ulang IPS dan IPK setelah KRS dihapus
         const ips = await calculateIPS(nim, semester, tahun);
-        const ipk = await calculateIPK(nim);
+        const ipk = await calculateIPK(nim, semester, tahun);
 
         // Update tabel IPK
         await IPK.upsert({

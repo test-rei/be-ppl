@@ -1,6 +1,5 @@
 import KRS from "../models/krs.js";
 import MK from "../models/mk.js";
-import { KRS } from "./models"; // Pastikan impor model KRS yang relevan
 
 // Fungsi untuk mendapatkan semester dan tahun terakhir
 export async function getLastSemesterAndYear(nim) {
@@ -72,11 +71,15 @@ export async function calculateIPS(nim, semester, tahun) {
     return ips;
 }
 
-export async function calculateIPK(nim) {
-    // Ambil semua KRS berdasarkan NIM
+export async function calculateIPK(nim, semester, tahun) {
+    // Ambil semua KRS berdasarkan NIM, semester, dan tahun yang kurang dari atau sama dengan parameter
     const krsList = await KRS.findAll({
-        where: { nim },
-        include: [MK], // Join dengan tabel MK
+        where: {
+            nim,
+            semester: { [Op.lte]: semester }, // Semester yang kurang dari atau sama dengan parameter
+            tahun: { [Op.lte]: tahun }, // Tahun yang kurang dari atau sama dengan parameter
+        },
+        include: [MK], // Join dengan tabel MK untuk mendapatkan SKS
     });
 
     // Jika tidak ada KRS untuk mahasiswa ini, return 0

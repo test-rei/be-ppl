@@ -31,14 +31,18 @@ export async function getAllMHSCalculate(req, res) {
         // Loop untuk menghitung IPK dan IPS untuk setiap mahasiswa
         const mhsWithIP = await Promise.all(
             mhsList.map(async (mhs) => {
-                // Hitung IPK berdasarkan NIM
-                const ipk = (await calculateIPK(mhs.nim)) || 0; // Fallback ke 0 jika IPK tidak ditemukan
-
-                // Ambil semester dan tahun terakhir dari database (bukan dari query)
+                // Ambil semester dan tahun terakhir untuk mahasiswa ini
                 const { semester, tahun } = await getLastSemesterAndYear(mhs.nim);
 
-                // Hitung IPS berdasarkan semester dan tahun terakhir atau fallback ke semester 1 dan tahun 2021 jika tidak ditemukan
-                const ips = (await calculateIPS(mhs.nim, semester, tahun)) || 0; // Fallback ke 0 jika IPS tidak ditemukan
+                // Gunakan semester dan tahun dari query, jika ada, jika tidak gunakan yang terakhir dari database
+                const semesterQuery = req.query.semester ? parseInt(req.query.semester) : semester; // Default ke semester terakhir jika tidak ada query
+                const tahunQuery = req.query.tahun ? parseInt(req.query.tahun) : tahun; // Default ke tahun terakhir jika tidak ada query
+
+                // Hitung IPK berdasarkan NIM, semester dan tahun terakhir
+                const ipk = (await calculateIPK(mhs.nim, semesterQuery, tahunQuery)) || 0; // Fallback ke 0 jika IPK tidak ditemukan
+
+                // Hitung IPS berdasarkan semester dan tahun terakhir
+                const ips = (await calculateIPS(mhs.nim, semesterQuery, tahunQuery)) || 0; // Fallback ke 0 jika IPS tidak ditemukan
 
                 // Return data mahasiswa dengan IPK dan IPS
                 return {
@@ -46,8 +50,8 @@ export async function getAllMHSCalculate(req, res) {
                     nama_mhs: mhs.nama_mhs,
                     ipk, // IPK yang dihitung
                     ips, // IPS yang dihitung
-                    semester, // Semester terakhir
-                    tahun, // Tahun terakhir
+                    semester: semesterQuery, // Semester yang digunakan dalam perhitungan
+                    tahun: tahunQuery, // Tahun yang digunakan dalam perhitungan
                 };
             })
         );
@@ -69,25 +73,30 @@ export async function getMHSByNIMCalculate(req, res) {
             return res.status(404).json({ error: "MHS not found" });
         }
 
-        // Ambil semester dan tahun terakhir
+        // Ambil semester dan tahun terakhir dari database (gunakan query parameter atau default)
         const { semester, tahun } = await getLastSemesterAndYear(nim);
 
-        // Hitung IPK berdasarkan seluruh KRS yang sudah diambil
-        const ipk = await calculateIPK(nim);
+        // Ambil semester dan tahun dari query jika ada, atau gunakan semester dan tahun terakhir
+        const semesterQuery = req.query.semester ? parseInt(req.query.semester) : semester;
+        const tahunQuery = req.query.tahun ? parseInt(req.query.tahun) : tahun;
 
-        // Hitung IPS untuk semester dan tahun terakhir
-        const ips = await calculateIPS(nim, semester, tahun);
+        // Hitung IPK berdasarkan NIM, semester, dan tahun
+        const ipk = (await calculateIPK(nim, semesterQuery, tahunQuery)) || 0;
+
+        // Hitung IPS berdasarkan semester dan tahun yang dipilih
+        const ips = (await calculateIPS(nim, semesterQuery, tahunQuery)) || 0;
 
         // Respon berisi detail mahasiswa, IPK, dan IPS
         res.status(200).json({
             nim: mhs.nim,
             nama_mhs: mhs.nama_mhs,
-            ipk: ipk || 0,
-            ips: ips || 0,
-            semester, // Semester terakhir
-            tahun, // Tahun terakhir
+            ipk, // IPK yang dihitung
+            ips, // IPS yang dihitung
+            semester: semesterQuery, // Semester yang digunakan dalam perhitungan
+            tahun: tahunQuery, // Tahun yang digunakan dalam perhitungan
         });
     } catch (error) {
+        console.error("Error retrieving MHS data:", error);
         res.status(500).json({ error: "Failed to retrieve MHS data" });
     }
 }
