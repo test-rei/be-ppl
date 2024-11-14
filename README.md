@@ -7,44 +7,44 @@ Proyek ini adalah API backend untuk mengelola sistem Kartu Rencana Studi (KRS) y
 
 Berdasarkan file `package.json`, berikut adalah penjelasan mengenai arsitektur backend dari proyek ini:
 
-### 1. **Platform**
+### 1. Platform
 
 -   **Node.js**: Proyek ini dibangun menggunakan **Node.js**, yang merupakan runtime JavaScript di server. Aplikasi dijalankan menggunakan perintah `node index.js`, yang menunjukkan bahwa `index.js` adalah file utama untuk memulai aplikasi.
 
-### 2. **Type Module**
+### 2. Type Module
 
 -   **ES Module (`type: "module"`)**: Dengan pengaturan `type: "module"`, proyek ini menggunakan **ES Modules**. Ini berarti Anda dapat menggunakan sintaks impor (`import`) dan ekspor (`export`) daripada sintaks CommonJS (`require` dan `module.exports`).
 
-### 3. **Server Framework**
+### 3. Server Framework
 
 -   **Express.js (`express: "^4.21.1"`)**: Aplikasi ini menggunakan **Express.js** sebagai framework server HTTP. Express mempermudah pembuatan rute, menangani middleware, dan menangani request-response pada server.
 
-### 4. **Database Management**
+### 4. Database Management
 
 -   **MySQL2 (`mysql2: "^3.11.4"`)**: Ini menunjukkan bahwa aplikasi berinteraksi dengan database MySQL atau MariaDB menggunakan driver **mysql2**. MySQL2 mendukung operasi asynchronous, sehingga dapat digunakan dengan `async/await`.
 -   **Sequelize (`sequelize: "^6.37.5"`)**: **Sequelize** adalah **ORM (Object Relational Mapping)** yang digunakan untuk mengelola interaksi antara kode JavaScript dan database relasional (dalam hal ini MySQL). Sequelize membantu membuat model data, menjalankan query, dan memanipulasi tabel tanpa menulis query SQL secara manual.
 
-### 5. **CORS Handling**
+### 5. CORS Handling
 
 -   **CORS (`cors: "^2.8.5"`)**: Untuk memungkinkan akses dari frontend yang mungkin berada di domain atau port yang berbeda, middleware **CORS** diintegrasikan. CORS akan memungkinkan atau menolak request dari origin lain yang mencoba mengakses API.
 
-### 6. **Environment Configuration**
+### 6. Environment Configuration
 
 -   **Dotenv (`dotenv: "^16.4.5"`)**: **Dotenv** digunakan untuk mengelola **environment variables** yang disimpan dalam file `.env`. Ini umum digunakan untuk menyembunyikan informasi sensitif seperti kredensial database atau API key dari kode sumber.
 
-### 7. **Development Tool**
+### 7. Development Tool
 
 -   **Nodemon (`nodemon: "^3.1.7"`)**: Aplikasi menggunakan **Nodemon** sebagai development tool. Nodemon secara otomatis akan merestart server ketika ada perubahan dalam kode, sehingga developer tidak perlu melakukannya secara manual setiap kali ada pembaruan dalam file.
 
-### 8. **Arsitektur Aplikasi**
+### 8. Arsitektur Aplikasi
 
 -   **MVC Pattern (Model-View-Controller)**: Meskipun tidak terlihat secara langsung dalam file `package.json`, dari penggunaan **Sequelize**, besar kemungkinan proyek ini menggunakan arsitektur **MVC**. **Sequelize** berfungsi sebagai **Model**, **Express.js** sebagai **Controller**, dan meskipun bagian **View** tidak terlihat, kemungkinan API ini terintegrasi dengan frontend lain.
 
-### 9. **Script untuk Menjalankan Aplikasi**
+### 9. Script untuk Menjalankan Aplikasi
 
 -   **"start": "node index.js"**: Perintah `start` akan menjalankan file `index.js` menggunakan `node`. Biasanya, `index.js` berfungsi sebagai entry point di mana server Express diinisialisasi, dan koneksi ke database MySQL dibuat.
 
-### 10. **Workflow Pengembangan**
+### 10. Workflow Pengembangan
 
 -   Saat proses pengembangan, developer mungkin menggunakan perintah:
     -   `npm start`: Untuk memulai aplikasi secara manual menggunakan Node.js.
@@ -73,16 +73,16 @@ Ini merupakan arsitektur yang sederhana, namun efisien untuk membangun REST API 
 
 - [Backend API - Sistem Manajemen KRS](#backend-api---sistem-manajemen-krs)
   - [Gambaran Umum Proyek](#gambaran-umum-proyek)
-    - [1. **Platform**](#1-platform)
-    - [2. **Type Module**](#2-type-module)
-    - [3. **Server Framework**](#3-server-framework)
-    - [4. **Database Management**](#4-database-management)
-    - [5. **CORS Handling**](#5-cors-handling)
-    - [6. **Environment Configuration**](#6-environment-configuration)
-    - [7. **Development Tool**](#7-development-tool)
-    - [8. **Arsitektur Aplikasi**](#8-arsitektur-aplikasi)
-    - [9. **Script untuk Menjalankan Aplikasi**](#9-script-untuk-menjalankan-aplikasi)
-    - [10. **Workflow Pengembangan**](#10-workflow-pengembangan)
+    - [1. Platform](#1-platform)
+    - [2. Type Module](#2-type-module)
+    - [3. Server Framework](#3-server-framework)
+    - [4. Database Management](#4-database-management)
+    - [5. CORS Handling](#5-cors-handling)
+    - [6. Environment Configuration](#6-environment-configuration)
+    - [7. Development Tool](#7-development-tool)
+    - [8. Arsitektur Aplikasi](#8-arsitektur-aplikasi)
+    - [9. Script untuk Menjalankan Aplikasi](#9-script-untuk-menjalankan-aplikasi)
+    - [10. Workflow Pengembangan](#10-workflow-pengembangan)
     - [Gambaran Umum](#gambaran-umum)
   - [Fitur](#fitur)
   - [Daftar Isi](#daftar-isi)
