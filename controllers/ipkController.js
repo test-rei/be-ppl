@@ -94,6 +94,70 @@ export async function getAllIPKCalculate(req, res) {
     }
 }
 
+export async function getIPKByIdCalculate(req, res) {
+    try {
+        const nim = req.params.nim; // Ambil NIM dari parameter URL
+
+        // Ambil data mahasiswa berdasarkan NIM
+        const mhs = await MHS.findByPk(nim);
+
+        // Jika mahasiswa tidak ditemukan, return 404
+        if (!mhs) {
+            return res.status(404).json({ error: "MHS not found" });
+        }
+
+        // Ambil seluruh data KRS mahasiswa tersebut untuk mendapatkan daftar semester dan tahun yang diambil
+        const krsList = await KRS.findAll({
+            where: { nim },
+            attributes: ["semester", "tahun"], // Ambil hanya semester dan tahun
+            group: ["semester", "tahun"], // Group by semester dan tahun
+            order: [
+                ["tahun", "ASC"], // Urutkan berdasarkan tahun dari terkecil
+                ["semester", "ASC"], // Urutkan berdasarkan semester dari terkecil
+            ],
+        });
+
+        // Jika tidak ada data KRS untuk mahasiswa ini, kembalikan dengan nilai default
+        if (krsList.length === 0) {
+            return res.status(200).json({
+                nim: mhs.nim,
+                nama_mhs: mhs.nama_mhs,
+                ipList: [], // Tidak ada data IP jika KRS kosong
+            });
+        }
+
+        // Loop setiap semester dan tahun untuk menghitung IPS dan IPK
+        const ipList = await Promise.all(
+            krsList.map(async (krs) => {
+                const { semester, tahun } = krs;
+
+                // Hitung IPS untuk semester dan tahun ini
+                const ips = await calculateIPS(nim, semester, tahun);
+
+                // Hitung IPK kumulatif hingga semester dan tahun ini
+                const ipk = await calculateIPK(nim, semester, tahun);
+
+                return {
+                    semester,
+                    tahun,
+                    ips: ips || 0, // IPS untuk semester dan tahun tersebut
+                    ipk: ipk || 0, // IPK kumulatif hingga semester dan tahun tersebut
+                };
+            })
+        );
+
+        // Return data mahasiswa dengan list IP (IPS & IPK) berdasarkan semester dan tahun
+        res.status(200).json({
+            nim: mhs.nim,
+            nama_mhs: mhs.nama_mhs,
+            ipList, // List IP per semester dan tahun
+        });
+    } catch (error) {
+        console.error("Error calculating IP list for NIM:", error);
+        res.status(500).json({ error: "Failed to retrieve IP list for student" });
+    }
+}
+
 export async function createIPK(req, res) {
     try {
         const { nim, semester, tahun, ips, ipk } = req.body;
