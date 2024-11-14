@@ -94,7 +94,7 @@ export async function getAllIPKCalculate(req, res) {
     }
 }
 
-export async function getIPKByIdCalculate(req, res) {
+export async function getIPKByNIMCalculate(req, res) {
     try {
         const nim = req.params.nim; // Ambil NIM dari parameter URL
 
