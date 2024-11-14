@@ -13,7 +13,7 @@ export async function getAllMHS(req, res) {
 export async function getMHSByNIM(req, res) {
     try {
         const nim = req.params.nim;
-        const mhs = await MHS.findOne({ where: { nim: "2105550001" } });
+        const mhs = await MHS.findByPk(nim);
 
         if (!mhs) {
             return res.status(404).json({ error: "MHS not found" });
