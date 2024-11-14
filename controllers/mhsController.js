@@ -14,6 +14,7 @@ export async function getMHSByNIM(req, res) {
     try {
         const nim = req.params.nim;
         console.log("NIM received:", nim);
+        console.log("Type of NIM:", typeof nim);
         const mhs = await MHS.findByPk(nim);
         if (!mhs) {
             return res.status(404).json({ error: "MHS not found" });
