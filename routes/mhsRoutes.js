@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get("/mhs", getAllMHS);
 router.get("/mhs/:nim", getMHSByNIM);
-router.get("/mhs", getAllMHSCalculate);
-router.get("/mhs/:nim", getMHSByNIMCalculate);
+router.get("/mhsc", getAllMHSCalculate);
+router.get("/mhsc/:nim", getMHSByNIMCalculate);
 router.post("/mhs", createMHS);
 router.patch("/mhs/:nim", updateMHS);
 router.delete("/mhs/:nim", deleteMHS);
