@@ -1,7 +1,7 @@
 import IPK from "../models/ipk.js";
 import MHS from "../models/mhs.js";
 import KRS from "../models/krs.js";
-import { calculateIPS, calculateIPK, getLastSemesterAndYear } from "./calculateIP.js";
+import { calculateIPS, calculateIPK } from "./calculateIP.js";
 
 export async function getAllIPK(req, res) {
     try {
@@ -96,9 +96,7 @@ export async function getAllIPKCalculate(req, res) {
 
 export async function getIPKByNIMCalculate(req, res) {
     try {
-        const nim = req.params.nim; // Ambil NIM dari parameter URL
-
-        // Ambil data mahasiswa berdasarkan NIM
+        const nim = req.params.nim;
         const mhs = await MHS.findByPk(nim);
 
         // Jika mahasiswa tidak ditemukan, return 404
