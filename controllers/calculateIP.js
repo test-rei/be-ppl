@@ -35,6 +35,29 @@ export async function getLastSemesterAndYear(nim) {
     }
 }
 
+function convertToGPA(na) {
+    // Konversi nilai akhir (NA) ke nilai skala 0-4
+    if (na >= 0 && na < 45) {
+        return 0.0; // E
+    } else if (na >= 45 && na < 50) {
+        return 1.0; // D
+    } else if (na >= 50 && na < 55) {
+        return 1.5; // D+
+    } else if (na >= 55 && na < 60) {
+        return 2.0; // C
+    } else if (na >= 60 && na < 65) {
+        return 2.5; // C+
+    } else if (na >= 65 && na < 75) {
+        return 3.0; // B
+    } else if (na >= 75 && na < 80) {
+        return 3.5; // B+
+    } else if (na >= 80 && na <= 100) {
+        return 4.0; // A
+    } else {
+        return null; // Nilai tidak valid
+    }
+}
+
 export async function calculateIPS(nim, semester, tahun) {
     // Ambil semua KRS berdasarkan NIM, semester, dan tahun
     const krsList = await KRS.findAll({
@@ -50,15 +73,19 @@ export async function calculateIPS(nim, semester, tahun) {
     let totalSKS = 0;
     let totalNilai = 0;
 
-    // Loop semua KRS dan hitung total SKS dan total nilai
+    // Loop semua KRS dan hitung total SKS dan total nilai (konversi nilai)
     krsList.forEach((krs) => {
         const nilai = krs.nilai; // Nilai mata kuliah dari KRS
         const sks = krs.MK ? krs.MK.sks : 0; // Pastikan SKS diambil dari relasi MK
 
         if (sks > 0) {
-            // Hanya jika SKS valid
-            totalSKS += sks;
-            totalNilai += nilai * sks;
+            // Hanya jika SKS valid, konversi nilai ke GPA
+            const gpa = convertToGPA(nilai); // Konversi nilai ke GPA
+
+            if (gpa !== null) {
+                totalSKS += sks;
+                totalNilai += gpa * sks;
+            }
         }
     });
 
@@ -91,15 +118,19 @@ export async function calculateIPK(nim, semester, tahun) {
     let totalSKS = 0;
     let totalNilai = 0;
 
-    // Loop semua KRS untuk menghitung total nilai dan SKS
+    // Loop semua KRS untuk menghitung total nilai dan SKS (konversi nilai)
     krsList.forEach((krs) => {
         const nilai = krs.nilai; // Nilai dari KRS
         const sks = krs.MK ? krs.MK.sks : 0; // Ambil SKS dari MK jika tersedia
 
         if (sks > 0) {
-            // Pastikan SKS valid
-            totalSKS += sks;
-            totalNilai += nilai * sks;
+            // Pastikan SKS valid, konversi nilai ke GPA
+            const gpa = convertToGPA(nilai); // Konversi nilai ke GPA
+
+            if (gpa !== null) {
+                totalSKS += sks;
+                totalNilai += gpa * sks;
+            }
         }
     });
 

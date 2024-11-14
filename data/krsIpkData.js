@@ -48,22 +48,31 @@ const generateDummyKRS = async (mkData, mhsData) => {
                 tahun++;
             }
 
-            // Tentukan jumlah mata kuliah yang akan diambil (min 3, max 7)
-            const numberOfCourses = Math.floor(Math.random() * (7 - 3 + 1)) + 3;
+            // Tentukan jumlah SKS per semester (min 18, max 24)
+            let totalSKS = Math.floor(Math.random() * (24 - 18 + 1)) + 18;
+            let currentSKS = 0; // Variabel untuk melacak total SKS yang telah diambil
+            const courses = []; // Array untuk menyimpan mata kuliah yang diambil
 
-            // Ambil 'numberOfCourses' mata kuliah acak
-            const courses = [];
-            while (courses.length < numberOfCourses) {
+            // Loop untuk menambahkan mata kuliah hingga mencapai totalSKS yang diinginkan
+            while (currentSKS < totalSKS) {
                 const randomMK = mkData[Math.floor(Math.random() * mkData.length)];
+
+                // Jika mata kuliah belum diambil dan total SKS tidak melebihi batas
                 if (!courses.find((course) => course.id_mk === randomMK.id_mk)) {
-                    courses.push(randomMK);
+                    const courseSKS = randomMK.sks;
+
+                    // Cek jika totalSKS tidak terlampaui setelah menambahkan mata kuliah ini
+                    if (currentSKS + courseSKS <= totalSKS) {
+                        courses.push(randomMK);
+                        currentSKS += courseSKS; // Tambahkan SKS ke total
+                    }
                 }
             }
 
-            // Generate nilai acak untuk setiap mata kuliah dengan angka 4 s/d 0
+            // Generate nilai acak untuk setiap mata kuliah dalam rentang 0-100
             const grades = courses.map((course) => ({
                 id_mk: course.id_mk,
-                nilai: Math.floor(Math.random() * 5), // Nilai antara 0 dan 4
+                nilai: Math.floor(Math.random() * 101), // Nilai antara 0 dan 100
             }));
 
             // Kirimkan setiap data KRS satu per satu secara asynchronous
@@ -73,7 +82,7 @@ const generateDummyKRS = async (mkData, mhsData) => {
                     semester,
                     nim,
                     id_mk: grade.id_mk,
-                    nilai: grade.nilai, // Nilai integer antara 0 dan 4
+                    nilai: grade.nilai, // Nilai antara 0 dan 100
                 };
 
                 // Kirim data KRS satu persatu dan tunggu hingga selesai sebelum lanjut
