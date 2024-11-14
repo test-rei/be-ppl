@@ -1,5 +1,6 @@
 import IPK from "../models/ipk.js";
 import MHS from "../models/mhs.js";
+import KRS from "../models/krs.js";
 import { calculateIPS, calculateIPK, getLastSemesterAndYear } from "./calculateIP.js";
 
 export async function getAllIPK(req, res) {
