@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/ipk", getAllIPK);
 router.get("/ipk/:id", getIPKById);
 router.get("/ipkc", getAllIPKCalculate);
-router.get("/ipkc/:id", getIPKByNIMCalculate);
+router.get("/ipkc/:nim", getIPKByNIMCalculate);
 router.post("/ipk", createIPK);
 router.patch("/ipk/:id", updateIPK);
 router.delete("/ipk/:id", deleteIPK);
