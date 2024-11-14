@@ -50,7 +50,7 @@ Berdasarkan file `package.json`, berikut adalah penjelasan mengenai arsitektur b
     -   `npm start`: Untuk memulai aplikasi secara manual menggunakan Node.js.
     -   `nodemon`: Untuk menjalankan aplikasi dalam mode development, di mana server akan restart otomatis setiap kali ada perubahan kode.
 
-### Gambaran Umum:
+### Gambaran Umum
 
 -   **Backend API** ini dibangun dengan **Express.js** sebagai framework server, terhubung dengan **MySQL** sebagai database menggunakan **Sequelize** ORM untuk memudahkan operasi database.
 -   **CORS** diatur untuk mengizinkan cross-origin requests, sehingga API dapat diakses oleh frontend yang berada di domain atau origin lain.
@@ -83,7 +83,7 @@ Ini merupakan arsitektur yang sederhana, namun efisien untuk membangun REST API 
     - [8. **Arsitektur Aplikasi**](#8-arsitektur-aplikasi)
     - [9. **Script untuk Menjalankan Aplikasi**](#9-script-untuk-menjalankan-aplikasi)
     - [10. **Workflow Pengembangan**](#10-workflow-pengembangan)
-    - [Gambaran Umum:](#gambaran-umum)
+    - [Gambaran Umum](#gambaran-umum)
   - [Fitur](#fitur)
   - [Daftar Isi](#daftar-isi)
   - [Instalasi](#instalasi)
