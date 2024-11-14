@@ -1,5 +1,6 @@
 import KRS from "../models/krs.js";
 import MK from "../models/mk.js";
+import { Op } from "sequelize";
 
 // Fungsi untuk mendapatkan semester dan tahun terakhir
 export async function getLastSemesterAndYear(nim) {
