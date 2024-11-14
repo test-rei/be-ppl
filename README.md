@@ -3,8 +3,7 @@
 ## Gambaran Umum Proyek
 
 Proyek ini adalah API backend untuk mengelola sistem Kartu Rencana Studi (KRS) yang mencatat data mahasiswa, mata kuliah (MK), nilai akademik (IPK), dan catatan KRS. Backend ini dibangun menggunakan **Node.js**, **Express.js**, dan **Sequelize ORM**, serta terhubung ke database **MySQL** untuk menyimpan dan mengelola data.
-Link [Backend](https://be.bitloka.top)
-Link [Frontend](https://fe.bitloka.top)
+Link [Backend](https://be.bitloka.top), Link [Frontend](https://fe.bitloka.top).
 
 ## Fitur
 
