@@ -1,5 +1,39 @@
 import KRS from "../models/krs.js";
 import MK from "../models/mk.js";
+import { KRS } from "./models"; // Pastikan impor model KRS yang relevan
+
+// Fungsi untuk mendapatkan semester dan tahun terakhir
+export async function getLastSemesterAndYear(nim) {
+    try {
+        // Query untuk mendapatkan semester dan tahun terakhir
+        const lastRecord = await KRS.findOne({
+            where: { nim },
+            order: [
+                ["tahun", "DESC"], // Urutkan tahun dari terbesar ke terkecil
+                ["semester", "DESC"], // Urutkan semester dari terbesar ke terkecil
+            ],
+            attributes: ["semester", "tahun"], // Hanya ambil semester dan tahun
+        });
+
+        if (lastRecord) {
+            return {
+                semester: lastRecord.semester,
+                tahun: lastRecord.tahun,
+            };
+        } else {
+            return {
+                semester: 1, // Default semester jika tidak ada data
+                tahun: 2021, // Default tahun jika tidak ada data
+            };
+        }
+    } catch (error) {
+        console.error("Error fetching last semester and year:", error);
+        return {
+            semester: 1, // Nilai default jika ada kesalahan
+            tahun: 2021, // Nilai default jika ada kesalahan
+        };
+    }
+}
 
 export async function calculateIPS(nim, semester, tahun) {
     // Ambil semua KRS berdasarkan NIM, semester, dan tahun
