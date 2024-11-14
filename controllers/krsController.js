@@ -3,6 +3,7 @@ import MHS from "../models/mhs.js";
 import MK from "../models/mk.js";
 import IPK from "../models/ipk.js";
 import { calculateIPS, calculateIPK } from "./calculateIP.js";
+import redis from "../config/cache.js";
 
 export async function getAllKRS(req, res) {
     try {
@@ -47,7 +48,7 @@ export async function createKRS(req, res) {
         const ipk = await calculateIPK(nim, semester, tahun);
 
         // Update tabel IPK
-        await IPK.upsert({
+        const ipkData = await IPK.upsert({
             nim,
             semester,
             tahun,
@@ -62,6 +63,17 @@ export async function createKRS(req, res) {
             mhs.ipk = ipk;
             await mhs.save();
         }
+
+        // Menghapus cache yang relevan
+        await redis.del(`/krs`);
+        await redis.del(`/ipk`);
+        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipkc`);
+        await redis.del(`/ipkc/${nim}`);
+        await redis.del(`/mhs`);
+        await redis.del(`/mhs/${nim}`);
+        await redis.del(`/mhsc`);
+        await redis.del(`/mhsc/${nim}`);
 
         res.status(201).json(newKRS);
     } catch (error) {
@@ -94,7 +106,7 @@ export async function updateKRS(req, res) {
         const ipk = await calculateIPK(krs.nim, krs.semester, krs.tahun);
 
         // Update tabel IPK
-        await IPK.upsert({
+        const ipkData = await IPK.upsert({
             nim: krs.nim,
             semester: krs.semester,
             tahun: krs.tahun,
@@ -109,6 +121,18 @@ export async function updateKRS(req, res) {
             mhs.ipk = ipk;
             await mhs.save();
         }
+
+        // Menghapus cache yang relevan
+        await redis.del(`/krs`);
+        await redis.del(req.originalUrl);
+        await redis.del(`/ipk`);
+        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipkc`);
+        await redis.del(`/ipkc/${nim}`);
+        await redis.del(`/mhs`);
+        await redis.del(`/mhs/${nim}`);
+        await redis.del(`/mhsc`);
+        await redis.del(`/mhsc/${nim}`);
 
         res.status(200).json(krs);
     } catch (error) {
@@ -138,7 +162,7 @@ export async function deleteKRS(req, res) {
         const ipk = await calculateIPK(nim, semester, tahun);
 
         // Update tabel IPK
-        await IPK.upsert({
+        const ipkData = await IPK.upsert({
             nim,
             semester,
             tahun,
@@ -153,6 +177,18 @@ export async function deleteKRS(req, res) {
             mhs.ipk = ipk;
             await mhs.save();
         }
+
+        // Menghapus cache yang relevan
+        await redis.del(`/krs`);
+        await redis.del(req.originalUrl);
+        await redis.del(`/ipk`);
+        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipkc`);
+        await redis.del(`/ipkc/${nim}`);
+        await redis.del(`/mhs`);
+        await redis.del(`/mhs/${nim}`);
+        await redis.del(`/mhsc`);
+        await redis.del(`/mhsc/${nim}`);
 
         res.status(200).json({ message: "KRS deleted successfully" });
     } catch (error) {

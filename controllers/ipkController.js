@@ -2,6 +2,7 @@ import IPK from "../models/ipk.js";
 import MHS from "../models/mhs.js";
 import KRS from "../models/krs.js";
 import { calculateIPS, calculateIPK } from "./calculateIP.js";
+import redis from "../config/cache.js";
 
 export async function getAllIPK(req, res) {
     try {
@@ -163,6 +164,10 @@ export async function createIPK(req, res) {
             return res.status(400).json({ error: "NIM, semester, tahun, IPS, and IPK are required" });
         }
         const newIPK = await IPK.create({ nim, semester, tahun, ips, ipk });
+
+        // Menghapus cache yang relevan
+        await redis.del(`/ipk`);
+
         res.status(201).json(newIPK);
     } catch (error) {
         res.status(500).json({ error: "Failed to create IPK" });
@@ -186,6 +191,11 @@ export async function updateIPK(req, res) {
         ipkData.ipk = ipk || ipkData.ipk;
 
         await ipkData.save();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/ipk`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json(ipkData);
     } catch (error) {
         res.status(500).json({ error: "Failed to update IPK" });
@@ -201,6 +211,11 @@ export async function deleteIPK(req, res) {
         }
 
         await ipkData.destroy();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/ipk`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json({ message: "IPK deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to delete IPK" });

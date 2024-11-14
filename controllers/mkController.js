@@ -1,4 +1,5 @@
 import MK from "../models/mk.js";
+import redis from "../config/cache.js";
 
 export async function getAllMK(req, res) {
     try {
@@ -29,6 +30,10 @@ export async function createMK(req, res) {
             return res.status(400).json({ error: "Nama MK and SKS are required" });
         }
         const newMK = await MK.create({ nama_mk, sks });
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mk`);
+
         res.status(201).json(newMK);
     } catch (error) {
         res.status(500).json({ error: "Failed to create MK" });
@@ -49,6 +54,11 @@ export async function updateMK(req, res) {
         mk.sks = sks || mk.sks;
 
         await mk.save();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mk`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json(mk);
     } catch (error) {
         res.status(500).json({ error: "Failed to update MK" });
@@ -64,6 +74,11 @@ export async function deleteMK(req, res) {
         }
 
         await mk.destroy();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mk`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json({ message: "MK deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to delete MK" });

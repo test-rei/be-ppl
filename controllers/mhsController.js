@@ -1,5 +1,6 @@
 import MHS from "../models/mhs.js";
 import { calculateIPS, calculateIPK, getLastSemesterAndYear } from "./calculateIP.js";
+import redis from "../config/cache.js";
 
 export async function getAllMHS(req, res) {
     try {
@@ -109,6 +110,10 @@ export async function createMHS(req, res) {
             return res.status(400).json({ error: "NIM and Nama MHS are required" });
         }
         const newMHS = await MHS.create({ nim, nama_mhs, ips, ipk });
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mhs`);
+
         res.status(201).json(newMHS);
     } catch (error) {
         res.status(500).json({ error: "Failed to create MHS" });
@@ -130,6 +135,11 @@ export async function updateMHS(req, res) {
         mhs.ipk = ipk || mhs.ipk;
 
         await mhs.save();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mhs`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json(mhs);
     } catch (error) {
         res.status(500).json({ error: "Failed to update MHS" });
@@ -145,6 +155,11 @@ export async function deleteMHS(req, res) {
         }
 
         await mhs.destroy();
+
+        // Menghapus cache yang relevan
+        await redis.del(`/mhs`);
+        await redis.del(req.originalUrl);
+
         res.status(200).json({ message: "MHS deleted successfully" });
     } catch (error) {
         res.status(500).json({ error: "Failed to delete MHS" });
