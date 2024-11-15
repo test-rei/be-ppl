@@ -15,14 +15,16 @@ export async function getAllIPK(req, res) {
     }
 }
 
-export async function getIPKById(req, res) {
+export async function getIPKByNIM(req, res) {
     try {
-        const id_ipk = req.params.id;
-        const ipk = await IPK.findByPk(id_ipk, {
+        const nim = req.params.nim; // Ambil NIM dari parameter URL
+        const ipk = await IPK.findAll({
+            where: { nim }, // Cari berdasarkan NIM
             include: [{ model: MHS }],
         });
-        if (!ipk) {
-            return res.status(404).json({ error: "IPK not found" });
+        if (ipk.length === 0) {
+            // Jika tidak ada data IPK ditemukan
+            return res.status(404).json({ error: "IPK not found for the specified NIM" });
         }
         res.status(200).json(ipk);
     } catch (error) {
@@ -194,7 +196,7 @@ export async function updateIPK(req, res) {
 
         // Menghapus cache yang relevan
         await redis.del(`/ipk`);
-        await redis.del(req.originalUrl);
+        await redis.del(`/ipk/${nim}`);
 
         res.status(200).json(ipkData);
     } catch (error) {
@@ -210,11 +212,11 @@ export async function deleteIPK(req, res) {
             return res.status(404).json({ error: "IPK not found" });
         }
 
-        await ipkData.destroy();
-
         // Menghapus cache yang relevan
         await redis.del(`/ipk`);
-        await redis.del(req.originalUrl);
+        await redis.del(`/ipk/${ipkData.nim}`);
+
+        await ipkData.destroy();
 
         res.status(200).json({ message: "IPK deleted successfully" });
     } catch (error) {

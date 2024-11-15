@@ -113,6 +113,7 @@ export async function createMHS(req, res) {
 
         // Menghapus cache yang relevan
         await redis.del(`/mhs`);
+        await redis.del(`/mhsc`);
 
         res.status(201).json(newMHS);
     } catch (error) {
@@ -139,6 +140,14 @@ export async function updateMHS(req, res) {
         // Menghapus cache yang relevan
         await redis.del(`/mhs`);
         await redis.del(req.originalUrl);
+        await redis.del(`/mhsc`);
+        await redis.del(`/mhsc/${nim}`);
+        await redis.del(`/ipk`);
+        await redis.del(`/ipk/${nim}`);
+        await redis.del(`/ipkc`);
+        await redis.del(`/ipkc/${nim}`);
+        await redis.del(`/krs`);
+        await redis.del(`/krs/${nim}`);
 
         res.status(200).json(mhs);
     } catch (error) {
@@ -159,6 +168,14 @@ export async function deleteMHS(req, res) {
         // Menghapus cache yang relevan
         await redis.del(`/mhs`);
         await redis.del(req.originalUrl);
+        await redis.del(`/mhsc`);
+        await redis.del(`/mhsc/${nim}`);
+        await redis.del(`/ipk`);
+        await redis.del(`/ipk/${nim}`);
+        await redis.del(`/ipkc`);
+        await redis.del(`/ipkc/${nim}`);
+        await redis.del(`/krs`);
+        await redis.del(`/krs/${nim}`);
 
         res.status(200).json({ message: "MHS deleted successfully" });
     } catch (error) {

@@ -16,14 +16,16 @@ export async function getAllKRS(req, res) {
     }
 }
 
-export async function getKRSById(req, res) {
+export async function getKRSByNIM(req, res) {
     try {
-        const id_krs = req.params.id;
-        const krs = await KRS.findByPk(id_krs, {
+        const nim = req.params.nim; // Ambil NIM dari parameter URL
+        const krs = await KRS.findAll({
+            where: { nim }, // Cari berdasarkan NIM
             include: [{ model: MHS }, { model: MK }],
         });
-        if (!krs) {
-            return res.status(404).json({ error: "KRS not found" });
+        if (krs.length === 0) {
+            // Jika tidak ada KRS ditemukan
+            return res.status(404).json({ error: "KRS not found for the specified NIM" });
         }
         res.status(200).json(krs);
     } catch (error) {
@@ -66,8 +68,9 @@ export async function createKRS(req, res) {
 
         // Menghapus cache yang relevan
         await redis.del(`/krs`);
+        await redis.del(`/krs/${nim}`);
         await redis.del(`/ipk`);
-        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipk/${nim}`);
         await redis.del(`/ipkc`);
         await redis.del(`/ipkc/${nim}`);
         await redis.del(`/mhs`);
@@ -124,9 +127,9 @@ export async function updateKRS(req, res) {
 
         // Menghapus cache yang relevan
         await redis.del(`/krs`);
-        await redis.del(req.originalUrl);
+        await redis.del(`/krs/${nim}`);
         await redis.del(`/ipk`);
-        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipk/${nim}`);
         await redis.del(`/ipkc`);
         await redis.del(`/ipkc/${nim}`);
         await redis.del(`/mhs`);
@@ -180,9 +183,9 @@ export async function deleteKRS(req, res) {
 
         // Menghapus cache yang relevan
         await redis.del(`/krs`);
-        await redis.del(req.originalUrl);
+        await redis.del(`/krs/${nim}`);
         await redis.del(`/ipk`);
-        await redis.del(`/ipk/${ipkData.id}`);
+        await redis.del(`/ipk/${nim}`);
         await redis.del(`/ipkc`);
         await redis.del(`/ipkc/${nim}`);
         await redis.del(`/mhs`);
